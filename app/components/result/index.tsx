@@ -83,8 +83,28 @@ const Result: FC<IResultProps> = ({
     setFeedback(feedback)
   }
 
+  const debugLog = (message: string, data?: any) => {
+    const timestamp = new Date().toISOString()
+    const debugData = {
+      timestamp,
+      message,
+      data,
+      state: {
+        isResponsing,
+        completionRes: completionResRef.current,
+        workflowStatus: workflowProcessDataRef.current?.status,
+        messageId,
+        isTimeout: false,
+      },
+    }
+    console.log('[Debug]', debugData)
+  }
+
   const logError = (message: string) => {
     notify({ type: 'error', message })
+    debugLog('Error occurred', {
+      errorMessage: message,
+    })
   }
 
   const checkCanSend = () => {
@@ -158,12 +178,14 @@ const Result: FC<IResultProps> = ({
 
     setResponsingTrue()
     let isEnd = false
-    let isTimeout = false;
-    (async () => {
+    let isTimeout = false
+    debugLog('Starting request', { inputs, isWorkflow })
+    ;(async () => {
       await sleep(1000 * 115) // 115秒のタイムアウト（サーバーの120秒より少し短く設定）
       if (!isEnd) {
         setResponsingFalse()
         onCompleted(getCompletionRes(), taskId, false)
+        debugLog('Request timeout')
         isTimeout = true
       }
     })()
@@ -173,6 +195,7 @@ const Result: FC<IResultProps> = ({
         data,
         {
           onWorkflowStarted: ({ workflow_run_id }) => {
+            debugLog('Workflow started', { workflow_run_id })
             tempMessageId = workflow_run_id
             setWorkflowProccessData({
               status: WorkflowRunningStatus.Running,
@@ -182,6 +205,7 @@ const Result: FC<IResultProps> = ({
             setResponsingFalse()
           },
           onNodeStarted: ({ data }) => {
+            debugLog('Node started', { nodeId: data.node_id })
             setWorkflowProccessData(produce(getWorkflowProccessData()!, (draft) => {
               draft.expand = true
               draft.tracing!.push({
@@ -192,6 +216,7 @@ const Result: FC<IResultProps> = ({
             }))
           },
           onNodeFinished: ({ data }) => {
+            debugLog('Node finished', { nodeId: data.node_id, error: data.error })
             setWorkflowProccessData(produce(getWorkflowProccessData()!, (draft) => {
               const currentIndex = draft.tracing!.findIndex(trace => trace.node_id === data.node_id)
               if (currentIndex > -1 && draft.tracing) {
@@ -206,8 +231,10 @@ const Result: FC<IResultProps> = ({
             }))
           },
           onWorkflowFinished: ({ data }) => {
-            if (isTimeout)
+            if (isTimeout) {
+              debugLog('Workflow finished but timeout already occurred')
               return
+            }
             if (data.error) {
               notify({ type: 'error', message: data.error })
               setResponsingFalse()
@@ -228,6 +255,13 @@ const Result: FC<IResultProps> = ({
             setMessageId(tempMessageId)
             onCompleted(getCompletionRes(), taskId, true)
             isEnd = true
+            debugLog('Workflow finished', {
+              hasOutputs: !!data.outputs,
+              outputKeys: data.outputs ? Object.keys(data.outputs) : [],
+              outputValues: data.outputs,
+              isTimeout,
+              isEnd,
+            })
           },
         },
       )
@@ -235,24 +269,32 @@ const Result: FC<IResultProps> = ({
     else {
       sendCompletionMessage(data, {
         onData: (data: string, _isFirstMessage: boolean, { messageId }) => {
+          debugLog('Received completion data', {
+            dataLength: data.length,
+            isFirstMessage: _isFirstMessage,
+            messageId,
+          })
           tempMessageId = messageId
           res.push(data)
           setCompletionRes(res.join(''))
         },
         onCompleted: () => {
-          if (isTimeout)
+          if (isTimeout) {
+            debugLog('Completion finished but timeout already occurred')
             return
+          }
 
           setResponsingFalse()
           setMessageId(tempMessageId)
           onCompleted(getCompletionRes(), taskId, true)
+          debugLog('Completion finished successfully')
           isEnd = true
         },
         onError() {
           if (isTimeout)
             return
-
           setResponsingFalse()
+          debugLog('Completion error occurred')
           onCompleted(getCompletionRes(), taskId, false)
           isEnd = true
         },
