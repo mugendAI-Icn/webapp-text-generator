@@ -3,8 +3,10 @@ import type { FC } from 'react'
 import { useEffect, useState } from 'react'
 import cn from 'classnames'
 import BlockIcon from './block-icon'
+import CodeEditor from './code-editor'
 import { AlertCircle, AlertTriangle } from '@/app/components/base/icons/line/alertsAndFeedback'
 import { CheckCircle, Loading02 } from '@/app/components/base/icons/line/general'
+import { CodeLanguage } from '@/types/app'
 import type { NodeTracing } from '@/types/app'
 
 type Props = {
@@ -74,10 +76,13 @@ const NodePanel: FC<Props> = ({ nodeInfo, hideInfo = false }) => {
         </div>
         {!collapseState && nodeInfo.outputs && (
           <div className="px-4 py-2 border-t border-gray-100">
-            <div className="text-xs text-gray-500 mb-1">出力:</div>
-            <pre className="text-xs bg-gray-50 p-2 rounded overflow-auto">
-              {JSON.stringify(nodeInfo.outputs, null, 2)}
-            </pre>
+            <CodeEditor
+              title={<div className="text-xs text-gray-500">出力</div>}
+              value={nodeInfo.outputs}
+              language={CodeLanguage.json}
+              readOnly={true}
+              isJSONStringifyBeauty={true}
+            />
           </div>
         )}
       </div>
