@@ -3,6 +3,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import commonEn from './lang/common.en'
 import commonZh from './lang/common.zh'
+import commonJa from './lang/common.ja'
 import appEn from './lang/app.en'
 import appZh from './lang/app.zh'
 import appJa from './lang/app.ja'
@@ -23,7 +24,7 @@ const resources = {
   },
   'ja': {
     translation: {
-      common: commonEn, // 一時的に英語のcommonを使用
+      common: commonJa,
       app: appJa,
     },
   },
