@@ -160,7 +160,7 @@ const Result: FC<IResultProps> = ({
     let isEnd = false
     let isTimeout = false;
     (async () => {
-      await sleep(1000 * 28) // 28秒のタイムアウト（サーバーの30秒より少し短く設定）
+      await sleep(1000 * 115) // 115秒のタイムアウト（サーバーの120秒より少し短く設定）
       if (!isEnd) {
         setResponsingFalse()
         onCompleted(getCompletionRes(), taskId, false)

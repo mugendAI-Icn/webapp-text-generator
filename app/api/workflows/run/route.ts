@@ -4,7 +4,7 @@ import { client, getInfo } from '@/app/api/utils/common'
 // Node.js ランタイムを使用するように設定
 export const runtime = 'nodejs'
 // タイムアウトを30秒に設定
-export const maxDuration = 30
+export const maxDuration = 120
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
