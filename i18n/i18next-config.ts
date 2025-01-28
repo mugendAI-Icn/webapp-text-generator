@@ -5,6 +5,7 @@ import commonEn from './lang/common.en'
 import commonZh from './lang/common.zh'
 import appEn from './lang/app.en'
 import appZh from './lang/app.zh'
+import appJa from './lang/app.ja'
 import type { Locale } from '.'
 
 const resources = {
@@ -18,6 +19,12 @@ const resources = {
     translation: {
       common: commonZh,
       app: appZh,
+    },
+  },
+  'ja': {
+    translation: {
+      common: commonEn, // 一時的に英語のcommonを使用
+      app: appJa,
     },
   },
 }

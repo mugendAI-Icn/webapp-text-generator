@@ -8,7 +8,7 @@ export const APP_INFO: AppInfo = {
   description: '志望理由書を自動生成する簡易ツールです。必要項目を設定の上、実行してください。',
   copyright: '',
   privacy_policy: '',
-  default_language: 'en',
+  default_language: 'ja',
 }
 
 export const API_PREFIX = '/api'

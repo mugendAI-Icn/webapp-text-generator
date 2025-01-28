@@ -43,7 +43,10 @@ const RunOnce: FC<IRunOnceProps> = ({
         <form>
           {promptConfig.prompt_variables.map(item => (
             <div className='w-full mt-4' key={item.key}>
-              <label className='text-gray-900 text-sm font-medium'>{item.name}</label>
+              <label className='text-gray-900 text-sm font-medium flex items-center'>
+                <span>{item.name}</span>
+                {item.required && <span className='ml-1 text-red-500'>*必須</span>}
+              </label>
               <div className='mt-2'>
                 {item.type === 'select' && (
                   <Select
@@ -59,7 +62,7 @@ const RunOnce: FC<IRunOnceProps> = ({
                   <input
                     type="text"
                     className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 "
-                    placeholder={`${item.name}${!item.required ? `(${t('appDebug.variableTable.optional')})` : ''}`}
+                    placeholder={item.name}
                     value={inputs[item.key]}
                     onChange={(e) => { onInputsChange({ ...inputs, [item.key]: e.target.value }) }}
                     maxLength={item.max_length || DEFAULT_VALUE_MAX_LEN}
@@ -68,7 +71,7 @@ const RunOnce: FC<IRunOnceProps> = ({
                 {item.type === 'paragraph' && (
                   <textarea
                     className="block w-full h-[104px] p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 "
-                    placeholder={`${item.name}${!item.required ? `(${t('appDebug.variableTable.optional')})` : ''}`}
+                    placeholder={item.name}
                     value={inputs[item.key]}
                     onChange={(e) => { onInputsChange({ ...inputs, [item.key]: e.target.value }) }}
                   />
@@ -77,7 +80,7 @@ const RunOnce: FC<IRunOnceProps> = ({
                   <input
                     type="number"
                     className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 "
-                    placeholder={`${item.name}${!item.required ? `(${t('appDebug.variableTable.optional')})` : ''}`}
+                    placeholder={item.name}
                     value={inputs[item.key]}
                     onChange={(e) => { onInputsChange({ ...inputs, [item.key]: e.target.value }) }}
                   />
