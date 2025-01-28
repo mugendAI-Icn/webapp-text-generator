@@ -72,14 +72,6 @@ const NodePanel: FC<Props> = ({ nodeInfo, hideInfo = false }) => {
             </div>
           )}
         </div>
-        {!collapseState && nodeInfo.process_data && (
-          <div className="px-4 py-2 border-t border-gray-100">
-            <div className="text-xs text-gray-500 mb-1">中間処理:</div>
-            <pre className="text-xs bg-gray-50 p-2 rounded overflow-auto">
-              {JSON.stringify(nodeInfo.process_data, null, 2)}
-            </pre>
-          </div>
-        )}
         {!collapseState && nodeInfo.outputs && (
           <div className="px-4 py-2 border-t border-gray-100">
             <div className="text-xs text-gray-500 mb-1">出力:</div>
