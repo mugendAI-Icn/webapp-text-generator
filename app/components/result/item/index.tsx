@@ -16,6 +16,7 @@ import Clipboard from '@/app/components/base/icons/line/clipboard'
 import RefreshCcw01 from '@/app/components/base/icons/line/refresh-ccw-01'
 import CodeEditor from '@/app/components/result/workflow/code-editor'
 import WorkflowProcessItem from '@/app/components/result/workflow/workflow-process'
+import { countCharacters } from '@/utils/string'
 import { CodeLanguage } from '@/types/app'
 
 export type IGenerationItemProps = {
@@ -240,7 +241,7 @@ const GenerationItem: FC<IGenerationItemProps> = ({
                   </>
                 )}
               </div>
-              <div className='text-xs text-gray-500'>{content?.length} {t('common.unit.char')}</div>
+              <div className='text-xs text-gray-500'>{countCharacters(content)} {t('common.unit.char')}</div>
             </div>
 
           </div>
