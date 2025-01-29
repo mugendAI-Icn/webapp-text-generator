@@ -181,7 +181,7 @@ const Result: FC<IResultProps> = ({
     let isTimeout = false
     debugLog('Starting request', { inputs, isWorkflow })
     ;(async () => {
-      await sleep(1000 * 115) // 115秒のタイムアウト（サーバーの120秒より少し短く設定）
+      await sleep(1000 * 195) // 195秒のタイムアウト（サーバーの200秒より少し短く設定）
       if (!isEnd) {
         setResponsingFalse()
         onCompleted(getCompletionRes(), taskId, false)

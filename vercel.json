@@ -1,7 +1,7 @@
 {
   "functions": {
     "app/api/workflows/run/route.ts": {
-      "maxDuration": 120
+      "maxDuration": 200
     }
   }
 }
